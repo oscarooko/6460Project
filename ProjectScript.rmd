@@ -1,0 +1,176 @@
+# These are the Scripts used to get data, clean it, transform it, run prediction algorithms and make analysis
+
+## reading SAS data
+# h192dat.sas7bdat
+
+# We have a few datasets in different formats. (h155.dta, h)
+
+Install required packages. Run this only once
+```{r}
+#install.packages("rmarkdown")
+#install.packages('knitr')
+#install.packages("foreign")
+#install.packages("dplyr")
+#install.packages("eeptools")
+#install.packages("utf8")
+#install.packages("bindr")
+#install.packages("crayon")
+#install.packages("pillar")
+#install.packages("purrr")  
+#install.packages("bindrcpp")
+#install.packages("magrittr")
+#install.packages("pkgconfig")
+#install.packages("R6")
+#install.packages("tibble")
+#install.packages("tidyselect")
+#install.packages("plogr")
+
+
+library("tibble")
+```
+
+Note: Loading Hmisc failed. Might wanna use a different package for this *******************TO DO******************
+
+mydata <- sasxport.get("c:/mydata.xpt") => Not working. Fix/find alternative  *******************TO DO******************
+
+Set the working Directory
+```{r}
+setwd("C:/GATECH/CS 6460 Ed Tech")
+```
+
+load required libraries. Run this every time
+```{r}
+
+#library(Hmisc)
+
+library(foreign)
+#library("knitr")
+#library("dplyr")
+#library(eeptools)
+```
+
+To import a dataset from Stata into R, the function read.dta() from foreign package is used. More specifically look the code below:
+It returns 38,974 observations of 1883 variables
+```{r}
+
+df <- read.dta("h155.dta")
+
+
+```
+
+Now, I wanna reduce the dataset to only columns asscosiated with cancer
+Currently values are :1-Yes, has Cancer
+                      2-No cancer
+                     -1-Inapplicable
+Eventual goal is to change  values 2 and 3 to 0 so that: 
+                      1 = Yes and 0=No
+1st I created a new column "positivediag". This will be used to store a value of 1 or 0 based on positive diagnoisis
+```{r}
+cancer <-df[1:100,c("duid","pid","dupersid","famid31","cabladdr","cabrain","cabreast","cacervix","cacolon","caleukem","calung","calymph","camelano","cancerdx","caother","caprosta","caskindk","caskinnm","cathroat","cathyrod")]
+
+cancer$postiveDiag<- NA
+View(cancer)
+```
+
+```{r}
+
+```
+
+
+Now we need to update the value of positiveDiag based on the preceding columns
+junk$nm[junk$nm == "B"] <- "b"
+
+cancer$cathyrod[cancer$cathyrod==2]<-0
+
+```{r}
+
+cancer$cathyrod[cancer$cathyrod!='1' ]<-0
+cancer$cathroat[cancer$cathroat!='1']<-0
+cancer$caskinnm[cancer$caskinnm!='1' ]<-0
+cancer$caskindk[cancer$caskindk!='1']<-0
+cancer$caprosta[cancer$caprosta!='1']<-0
+cancer$caother[cancer$caother!='1']<-0
+cancer$cancerdx[cancer$cancerdx!='1']<-0
+cancer$camelano[cancer$camelano!='1']<-0
+cancer$calymph[cancer$calymph!='1']<-0
+cancer$calung[cancer$calung!='1']<-0
+cancer$caleukem[cancer$caleukem!='1']<-0
+cancer$cacolon[cancer$cacolon!='1']<-0
+cancer$cacervix[cancer$cacervix!='1']<-0
+cancer$cabreast[cancer$cabreast!='1']<-0
+cancer$cabrain[cancer$cabrain!='1']<-0
+cancer$cabladdr[cancer$cabladdr!='1']<-0
+
+
+cancer$cathyrod[cancer$cathyrod==2 ]<-0
+cancer$cathroat[cancer$cathroat==2]<-0
+cancer$caskinnm[cancer$caskinnm==2 ]<-0
+cancer$caskindk[cancer$caskindk==2]<-0
+cancer$caprosta[cancer$caprosta==2]<-0
+cancer$caother[cancer$caother==2 ]<-0
+cancer$cancerdx[cancer$cancerdx==2]<-0
+cancer$camelano[cancer$camelano==2 ]<-0
+cancer$calymph[cancer$calymph==2 ]<-0
+cancer$calung[cancer$calung==2 ]<-0
+cancer$caleukem[cancer$caleukem==2 ]<-0
+cancer$cacolon[cancer$cacolon==2 ]<-0
+cancer$cacervix[cancer$cacervix==2 ]<-0
+cancer$cabreast[cancer$cabreast==2 ]<-0
+cancer$cabrain[cancer$cabrain==2 ]<-0
+cancer$cabladdr[cancer$cabladdr==2 ]<-0
+
+#Now lets change the -1 values to 0 too
+cancer$cathyrod[cancer$cathyrod=='-1']<-0
+cancer$cathroat[cancer$cathroat=='-1']<-0
+cancer$caskinnm[cancer$caskinnm=='-1']<-0
+cancer$caskindk[cancer$caskindk=='-1']<-0
+cancer$caprosta[cancer$caprosta=='-1']<-0
+cancer$caother[cancer$caother=='-1']<-0
+cancer$cancerdx[cancer$cancerdx=='-1']<-0
+cancer$camelano[cancer$camelano=='-1']<-0
+cancer$calymph[cancer$calymph=='-1']<-0
+cancer$calung[cancer$calung=='-1']<-0
+cancer$caleukem[cancer$caleukem=='-1']<-0
+cancer$cacolon[cancer$cacolon=='-1']<-0
+cancer$cacervix[cancer$cacervix=='-1']<-0
+cancer$cabreast[cancer$cabreast=='-1']<-0
+cancer$cabrain[cancer$cabrain=='-1']<-0
+cancer$cabladdr[cancer$cabladdr=='-1']<-0
+
+View(cancer)
+```
+
+
+
+```{r}
+#type(cancer$cabreast)
+install.packages("plyr")
+
+library("plyr")
+
+```
+
+
+
+
+```{r}
+revalue(cancer$cathyrod)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
